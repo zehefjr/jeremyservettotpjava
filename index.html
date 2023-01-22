@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css" />
+  <title>TP JAVA</title>
+</head>
+  <body>
+    
+    <form id="add-form">
+      <h1>Ajouter un devoir</h1>
+      <label for="subject">Matière :</label>
+      <select id="subject"></select>
+      <br>
+      <label for="titre">Titre :</label>
+      <input type="text" id="titre" name="titre">
+      <br>
+      <label for="date">Date :</label>
+      <input type="date" id="date" name="date">
+      <br>
+      <button type="submit">Ajouter</button>
+    </form>
+    
+    <form id="add-subject-form">
+      <h1>Ajouter une matière</h1>
+      <label for="new-subject">Nom de la matière :</label>
+      <input type="text" id="new-subject">
+      <br>
+      <button type="submit">Ajouter</button>
+    </form>
+    <h1>Liste des devoirs</h1>
+    <table id="maliste">
+      <thead>
+        <th>Matière</th>
+        <th>Titre</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <script>
+      // array pour stocker les matières
+      const subjects = [];
+      // récupération des éléments du formulaire
+      const addForm = document.getElementById("add-form");
+      const subjectSelect = document.getElementById("subject");
+      const addSubjectForm = document.getElementById("add-subject-form");
+      const newSubjectInput = document.getElementById("new-subject");
+      const homeworkList = document.getElementById("maliste").querySelector("tbody");
+
+      // fonction pour ajouter une matière à la liste
+      function addSubject(e) {
+        e.preventDefault();
+        const subject = newSubjectInput.value;
+        subjects.push(subject);
+        //ajouter la matière dans le select
+        const option = document.createElement("option");
+        option.value = subject;
+        option.text = subject;
+        subjectSelect.appendChild(option);
+        newSubjectInput.value = "";
+      }
+
+      addSubjectForm.addEventListener("submit", addSubject);
+
+      // ajouter un devoir à la liste
+      function addHomework(e) {
+        e.preventDefault();
+        const subject = subjectSelect.value;
+        const titre = document.getElementById("titre").value;
+        const date = document.getElementById("date").value;
+
+               // créer une nouvelle ligne dans le tableau pour afficher le devoir
+               const row = document.createElement("tr");
+        row.innerHTML = `<td>${subject}</td><td>${titre}</td><td>${date}</td><td><button onclick="terminate(event)">V</button> <button onclick="supprimer(event)">X</button></td>`;
+        homeworkList.appendChild(row);
+
+        // vider les champs de formulaire
+        subjectSelect.value = "";
+        document.getElementById("titre").value = "";
+        document.getElementById("date").value = "";
+      }
+
+      addForm.addEventListener("submit", addHomework);
+
+      // fonction pour supprimer un devoir de la liste
+      function supprimer(event) {
+        const parent = event.target.parentElement.parentElement;
+        homeworkList.removeChild(parent);
+      }
+
+      // fonction pour marquer un devoir comme fait
+      function terminate(event) {
+        const parent = event.target.parentElement.parentElement;
+        parent.style.textDecoration = "line-through";
+      }
+    </script>
+  </body>
+</html>
+
